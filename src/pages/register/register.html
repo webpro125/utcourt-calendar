@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Register</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="login-content" padding>
+  <div class="login-box">
+    {{ userEmail }}
+    <form (ngSubmit)="register()" [formGroup]="regForm">
+      <div class="alert alert-danger" *ngFor="let data of errorMessage">
+        <strong>{{ data }}</strong>
+      </div>
+      <ion-item>
+        <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+        <ion-input type="text" name="email" placeholder="Email" formControlName="email" type="email" id="email" #email class="form-control"></ion-input>
+      </ion-item>
+      <span *ngIf="!regForm.controls.email.valid  && (regForm.controls.email.dirty)" class="invalid">
+        Email is invalid!
+      </span>
+
+      <ion-item>
+        <ion-input type="password" placeholder="Password" name="password" formControlName="password"></ion-input>
+      </ion-item>
+      <span *ngIf="!regForm.controls.password.valid  && (regForm.controls.password.dirty)" class="invalid">
+         Please enter at least 6 characters
+      </span>
+
+      <ion-item>
+        <ion-input formControlName="confirmPassword" placeholder="Confirm Password" type="password" id="confirm-password" #confirmPassword class="form-control" name="confirm_password"></ion-input>
+      </ion-item>
+      <span *ngIf="!regForm.controls.confirmPassword.pristine && regForm.controls.confirmPassword.errors != null && regForm.controls.confirmPassword.errors['passwordsNotMatch']" class="invalid">Passwords do not match</span>
+
+      <ion-row>
+        <ion-col class="signup-col">
+          <button ion-button class="submit-btn" full type="submit" [disabled]="!regForm.valid">Register</button>
+        </ion-col>
+      </ion-row>
+
+    </form>
+  </div>
+</ion-content>
