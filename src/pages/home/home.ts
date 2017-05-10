@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Auth } from '../../providers/auth';
 import {Storage} from "@ionic/Storage";
-import { LoginPage } from '../../pages/login/login';
+import { Http, Headers } from '@angular/http';
+// import { LoginPage } from '../../pages/login/login';
 
 @Component({
   selector: 'page-home',
@@ -10,19 +11,35 @@ import { LoginPage } from '../../pages/login/login';
 })
 export class HomePage {
   authenticated: boolean = false;
-  constructor(public nav: NavController, private auth: Auth, private storage: Storage) {
+  constructor(public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
     this.auth.authenticated().then((result) => {
       this.authenticated = true;
     }, (error) => {
-      this.nav.setRoot(LoginPage);
-      this.nav.push(LoginPage);
+      this.nav.setRoot('LoginPage');
+      // this.nav.push(LoginPage);
     });
+  }
+
+  user_info() {
+
+    this.storage.get('token').then((token) => {
+      console.log(token);
+      let headers = new Headers();
+      headers.append('Authorization', 'Bearer ' + token);
+
+      this.http.get('http://192.168.77.153:3000/api/user_info', {
+        headers: headers
+      }).map(res => res.json())
+        .subscribe(
+          data => console.log(data),
+          err => console.log(err)
+        );
+    })
   }
 
   logout() {
     this.storage.remove('token');
     this.storage.remove('profile');
-    this.nav.setRoot(LoginPage);
-    this.nav.push(LoginPage);
+    this.nav.setRoot('LoginPage');
   }
 }

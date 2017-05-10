@@ -9,7 +9,6 @@
 
 <ion-content class="login-content" padding>
   <div class="login-box">
-    {{ userEmail }}
     <form (ngSubmit)="register()" [formGroup]="regForm">
       <div class="alert alert-danger" *ngFor="let data of errorMessage">
         <strong>{{ data }}</strong>

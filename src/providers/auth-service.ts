@@ -47,22 +47,14 @@ export class AuthService {
       return Observable.throw("Please insert credentials");
     } else {
       return this.http.post(this.SIGNIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-        .map(res => {
-          if (res.headers.get('access-token'))
-            this.authSuccess(res.headers.get('access-token'));
-          return res.json();
-        });
+        .map(res => res.json());
     }
   }
 
   public register(credentials) {
 
     return this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-      .map(res => {
-        if (res.headers.get('access-token'))
-          this.authSuccess(res.headers.get('access-token'));
-        return res.json();
-    });
+      .map(res => res.json());
       // At this point store the credentials to your backend!
       //return Observable.create(observer => {
       //  observer.next(true);

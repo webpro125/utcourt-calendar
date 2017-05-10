@@ -35,7 +35,7 @@ export class RegisterPage implements OnInit {
     //});
     this.auth1.authenticated().then((result) => {
         this.nav.setRoot(HomePage);
-        this.nav.push(HomePage);
+        // this.nav.push(HomePage);
       }, (error) => {
     });
   }
@@ -77,20 +77,25 @@ export class RegisterPage implements OnInit {
   }
 
   public register() {
-    this.auth.register(this.regForm.value).subscribe(
-      data => {
-        this.authSuccess(data.data);
-        this.nav.push(HomePage);
-      },
-      err => {
-        this.errorMessage = JSON.parse(err._body).errors.full_messages;
-      },
-      () => console.log('Movie Search Complete')
-    );
+
+    if (this.regForm.valid) {
+      this.auth.register(this.regForm.value).subscribe(
+        data => {
+          this.authSuccess(data);
+          this.nav.setRoot(HomePage);
+        },
+        err => {
+          console.log(err);
+          this.errorMessage = JSON.parse(err._body).errors;
+        },
+        () => console.log('Movie Search Complete')
+      );
+    }
   }
   public authSuccess(user) {
     this.error = null;
-    this.storage.set('profile', user);
+    this.storage.set('profile', user.user);
+    this.storage.set('token', user.auth_token);
   }
 
   showPopup(title, text) {

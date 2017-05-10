@@ -18,7 +18,7 @@ import {Storage} from "@ionic/Storage";
 export class LoginPage implements OnInit {
   loading: Loading;
   registerCredentials = { email: '', password: '' };
-  loggedIn: boolean = false;
+  authenticated: boolean = false;
   errorMessage = '';
 
   ngOnInit(): any {
@@ -27,7 +27,6 @@ export class LoginPage implements OnInit {
   constructor(public navCtrl: NavController, public auth1: Auth, private nav: NavController, private auth: AuthService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
     this.auth1.authenticated().then((result) => {
       this.nav.setRoot(HomePage);
-      this.nav.push(HomePage);
     }, (error) => {
     });
   }
@@ -40,8 +39,8 @@ export class LoginPage implements OnInit {
     this.showLoading();
     this.auth.login(this.registerCredentials).subscribe(
       data => {
-        this.authSuccess(data.data);
-        this.nav.push(HomePage);
+        this.authSuccess(data);
+        this.nav.setRoot(HomePage);
       },
       err => {
         this.showError("Your credentails are not correct!");
@@ -74,6 +73,7 @@ export class LoginPage implements OnInit {
   }
 
   public authSuccess(user) {
-    this.storage.set('profile', user);
+    this.storage.set('profile', user.user);
+    this.storage.set('token', user.auth_token);
   }
 }
