@@ -74,8 +74,4 @@ export class AuthService {
     });
   }
 
-  authSuccess(token) {
-    this.error = null;
-    this.storage.set('token', token);
-  }
 }

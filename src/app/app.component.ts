@@ -4,8 +4,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { Auth } from './../providers/auth';
+import { Auth } from '../providers/auth';
+import {Storage} from "@ionic/Storage";
 
 @Component({
   templateUrl: 'app.html'
@@ -17,7 +17,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private auth: Auth) {
+  constructor(private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private auth: Auth) {
 
     this.auth.authenticated().then((result) => {
       this.rootPage = HomePage;
@@ -30,9 +30,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'Login', component: 'LoginPage' },
-      { title: 'Register', component: 'RegisterPage' },
-      { title: 'List', component: ListPage }
+      { title: 'Request', component: 'Request' },
     ];
 
   }
@@ -51,5 +49,11 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.push(page.component);
 
+  }
+
+  logout() {
+    this.storage.remove('token');
+    this.storage.remove('profile');
+    this.nav.setRoot('LoginPage');
   }
 }

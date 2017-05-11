@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, MenuController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import {Storage} from "@ionic/Storage";
@@ -17,16 +17,15 @@ import { Auth } from '../../providers/auth';
   templateUrl: 'register.html',
 })
 export class RegisterPage implements OnInit {
-  createSuccess = false;
+
   registerCredentials = { email: '', password: '', password_confirmation: '' };
 
   regForm: FormGroup;
-  error = false;
-  errorMessage = '';
-  userEmail: string;
-  userId: number;
 
-  constructor(private nav: NavController, private auth: AuthService, private fb: FormBuilder, private alertCtrl: AlertController, private storage: Storage, private auth1: Auth) {
+  errorMessage = '';
+
+  constructor(private menu: MenuController, private nav: NavController, private auth: AuthService, private fb: FormBuilder, private storage: Storage, private auth1: Auth) {
+    this.menu.enable(false, 'myMenu');
     //storage.ready().then(() => {
     //  storage.get('profile').then(profile => {
     //    this.userEmail = profile.email;
@@ -35,7 +34,6 @@ export class RegisterPage implements OnInit {
     //});
     this.auth1.authenticated().then((result) => {
         this.nav.setRoot(HomePage);
-        // this.nav.push(HomePage);
       }, (error) => {
     });
   }
@@ -81,8 +79,10 @@ export class RegisterPage implements OnInit {
     if (this.regForm.valid) {
       this.auth.register(this.regForm.value).subscribe(
         data => {
-          this.authSuccess(data);
-          this.nav.setRoot(HomePage);
+          this.storage.set('profile', data.user);
+          this.storage.set('token', data.auth_token).then(() =>{
+            this.nav.setRoot(HomePage);
+          });
         },
         err => {
           console.log(err);
@@ -92,27 +92,6 @@ export class RegisterPage implements OnInit {
       );
     }
   }
-  public authSuccess(user) {
-    this.error = null;
-    this.storage.set('profile', user.user);
-    this.storage.set('token', user.auth_token);
-  }
 
-  showPopup(title, text) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: text,
-      buttons: [
-        {
-          text: 'OK',
-          handler: data => {
-            if (this.createSuccess) {
-              this.nav.popToRoot();
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+
 }

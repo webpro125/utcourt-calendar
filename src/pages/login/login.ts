@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, Loading, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { AlertController, LoadingController, Loading, IonicPage, NavController, MenuController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { Auth } from '../../providers/auth';
 import { HomePage } from '../../pages/home/home';
@@ -15,16 +15,14 @@ import {Storage} from "@ionic/Storage";
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   loading: Loading;
   registerCredentials = { email: '', password: '' };
   authenticated: boolean = false;
   errorMessage = '';
 
-  ngOnInit(): any {
-
-  }
-  constructor(public navCtrl: NavController, public auth1: Auth, private nav: NavController, private auth: AuthService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
+  constructor(private menu: MenuController, public auth1: Auth, private nav: NavController, private auth: AuthService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
+    this.menu.enable(false, 'myMenu');
     this.auth1.authenticated().then((result) => {
       this.nav.setRoot(HomePage);
     }, (error) => {
@@ -39,8 +37,12 @@ export class LoginPage implements OnInit {
     this.showLoading();
     this.auth.login(this.registerCredentials).subscribe(
       data => {
-        this.authSuccess(data);
-        this.nav.setRoot(HomePage);
+        // this.authSuccess(data);
+        this.storage.set('profile', data.user);
+        this.storage.set('token', data.auth_token).then(() =>{
+          this.nav.setRoot(HomePage);
+        });
+
       },
       err => {
         this.showError("Your credentails are not correct!");
@@ -72,8 +74,4 @@ export class LoginPage implements OnInit {
     console.log('ionViewDidLoad Login');
   }
 
-  public authSuccess(user) {
-    this.storage.set('profile', user.user);
-    this.storage.set('token', user.auth_token);
-  }
 }

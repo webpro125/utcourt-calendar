@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, MenuController} from 'ionic-angular';
 import { Auth } from '../../providers/auth';
 import {Storage} from "@ionic/Storage";
 import { Http, Headers } from '@angular/http';
@@ -11,7 +11,8 @@ import { Http, Headers } from '@angular/http';
 })
 export class HomePage {
   authenticated: boolean = false;
-  constructor(public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
+  constructor(private menu: MenuController, public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
+    this.menu.enable(true, 'myMenu');
     this.auth.authenticated().then((result) => {
       this.authenticated = true;
     }, (error) => {
@@ -37,9 +38,5 @@ export class HomePage {
     })
   }
 
-  logout() {
-    this.storage.remove('token');
-    this.storage.remove('profile');
-    this.nav.setRoot('LoginPage');
-  }
+
 }
