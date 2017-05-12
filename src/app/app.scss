@@ -32,3 +32,17 @@
   border-radius: 4px;
   font-size: 13px;
 }
+
+.ng-invalid + span.invalid {
+  display: block;
+  margin-top: 6px;
+  padding: 0 1px;
+  font-style: normal;
+  font-size: 11px;
+  line-height: 15px;
+  color: #ee9393;
+  padding-left: 30px;
+}
+span.invalid {
+  margin-bottom: 15px;
+}

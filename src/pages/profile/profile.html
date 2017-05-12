@@ -1,0 +1,56 @@
+<!--
+  Generated template for the Profile page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar hideBackButton="true">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>My Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="profile-box">
+    <form (ngSubmit)="profileSubmit()" [formGroup]="profileForm">
+      <div class="alert alert-danger" *ngFor="let data of errorMessage">
+        <strong>{{ data }}</strong>
+      </div>
+      <ion-item>
+        <ion-label color="primary" stacked>Email</ion-label>
+        <ion-input name="email" placeholder="Email" formControlName="email" type="email" id="email" #email class="form-control"></ion-input>
+      </ion-item>
+      <span *ngIf="!profileForm.controls.email.valid  && (profileForm.controls.email.dirty)" class="invalid">
+        Email is invalid!
+      </span>
+
+      <ion-item>
+        <ion-label color="primary" stacked>Password</ion-label>
+        <ion-input #input type="password" placeholder="Password" name="password" formControlName="password"></ion-input>
+        <button ion-button item-right class="btn" type="button" (click)="showPassword(input)">show</button>
+      </ion-item>
+      <span *ngIf="!profileForm.controls.password.valid  && (profileForm.controls.password.dirty)" class="invalid">
+         Please enter at least 6 characters
+      </span>
+
+      <ion-item>
+        <ion-label color="primary" stacked>Confirm Password</ion-label>
+        <ion-input formControlName="password_confirmation" placeholder="Confirm Password" type="password" id="confirm-password" #password_confirmation class="form-control" name="password_confirmation"></ion-input>
+      </ion-item>
+      <span *ngIf="!profileForm.controls.password_confirmation.pristine && profileForm.controls.password_confirmation.errors != null && profileForm.controls.password_confirmation.errors['passwordsNotMatch']" class="invalid">Passwords do not match</span>
+
+      <ion-row>
+        <ion-col class="signup-col">
+          <button ion-button class="submit-btn" full type="submit" [disabled]="!profileForm.valid">Register</button>
+        </ion-col>
+      </ion-row>
+
+    </form>
+  </div>
+</ion-content>

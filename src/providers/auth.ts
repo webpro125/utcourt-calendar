@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AlertController, LoadingController, Loading } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Storage} from "@ionic/Storage";
@@ -11,8 +12,9 @@ import {Storage} from "@ionic/Storage";
 */
 @Injectable()
 export class Auth {
+  loading: Loading;
 
-  constructor(public http: Http, private storage: Storage) {
+  constructor(public http: Http, private storage: Storage, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
 
   }
   public authenticated() {
@@ -30,4 +32,25 @@ export class Auth {
 
   }
 
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true
+    });
+    this.loading.present();
+  }
+
+  hideLoading() {
+    this.loading.dismiss();
+  }
+  showMessage(text, type) {
+    this.loading.dismiss();
+
+    let alert = this.alertCtrl.create({
+      title: type,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
+  }
 }

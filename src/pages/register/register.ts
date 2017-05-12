@@ -78,7 +78,7 @@ export class RegisterPage implements OnInit {
 
     if (this.regForm.valid) {
       this.auth.register(this.regForm.value).subscribe(
-        data => {
+       data => {
           this.storage.set('profile', data.user);
           this.storage.set('token', data.auth_token).then(() =>{
             this.nav.setRoot(HomePage);

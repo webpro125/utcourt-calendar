@@ -30,6 +30,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
+      { title: 'Profile', component: 'Profile' },
       { title: 'Request', component: 'Request' },
     ];
 
@@ -52,8 +53,10 @@ export class MyApp {
   }
 
   logout() {
-    this.storage.remove('token');
     this.storage.remove('profile');
-    this.nav.setRoot('LoginPage');
+    this.storage.remove('token').then(() => {
+      this.nav.setRoot('LoginPage');
+    });
+
   }
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import { Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
-import {JwtHelper} from "angular2-jwt";
 import {Storage} from "@ionic/Storage";
 import * as Constant from '../providers/constant'
 
@@ -29,17 +28,16 @@ export class AuthService {
   private SIGNUP_URL = Constant.SIGNUP_URL;
   private SIGNIN_URL = Constant.SIGNIN_URL;
   contentHeader = new Headers({"Content-Type": "application/json"});
-  jwtHelper = new JwtHelper();
-  error: string;
-  user: string;
+  regForm:any;
 
   constructor(public http: Http, private storage: Storage) {
     console.log('Hello AuthService Provider');
-    //storage.ready().then(() => {
-    //  storage.get('profile').then(profile => {
-    //    this.user = JSON.parse(profile);
-    //  }).catch(console.log);
-    //});
+
+    storage.ready().then(() => {
+     storage.get('profile').then(profile => {
+       this.currentUser = JSON.parse(profile);
+     }).catch(console.log);
+    });
   }
 
   public login(credentials) {
@@ -64,14 +62,6 @@ export class AuthService {
 
   public getUserInfo() : User {
     return this.currentUser;
-  }
-
-  public logout() {
-    return Observable.create(observer => {
-      this.currentUser = null;
-      observer.next(true);
-      observer.complete();
-    });
   }
 
 }
