@@ -1,4 +1,5 @@
-export const SIGNUP_URL= 'http://192.168.77.153:3000/api/register_user';
-export const SIGNIN_URL= 'http://192.168.77.153:3000/api/auth_user';
-export const REQUEST_URL= 'http://192.168.77.153:3000/api/requests';
-export const PROFILE_URL= 'http://192.168.77.153:3000/api/users';
+export const HOST_URL= 'http://192.168.77.153:3000';
+export const SIGNUP_URL= HOST_URL + '/api/register_user';
+export const SIGNIN_URL= HOST_URL + '/api/auth_user';
+export const REQUEST_URL= HOST_URL + '/api/requests';
+export const PROFILE_URL= HOST_URL + '//api/users';

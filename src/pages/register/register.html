@@ -13,7 +13,27 @@
       <div class="alert alert-danger" *ngFor="let data of errorMessage">
         <strong>{{ data }}</strong>
       </div>
+
       <ion-item>
+        <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+        <ion-label color="primary">Name</ion-label>
+        <ion-input name="name" placeholder="Full Name" formControlName="name" type="text" id="name" #name class="form-control"></ion-input>
+      </ion-item>
+      <span *ngIf="!regForm.controls.name.valid  && (regForm.controls.name.dirty)" class="invalid">
+        Name is Required
+      </span>
+
+      <ion-item>
+        <ion-label color="primary">Phone Number</ion-label>
+        <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+        <ion-input name="phone" placeholder="Phone Number" formControlName="phone" type="text" id="phone" #phone class="form-control"></ion-input>
+      </ion-item>
+      <span *ngIf="!regForm.controls.phone.valid  && (regForm.controls.phone.dirty)" class="invalid">
+        Phone Number is Required
+      </span>
+
+      <ion-item>
+        <ion-label color="primary">Email</ion-label>
         <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
         <ion-input name="email" placeholder="Email" formControlName="email" type="email" id="email" #email class="form-control"></ion-input>
       </ion-item>
@@ -22,6 +42,7 @@
       </span>
 
       <ion-item>
+        <ion-label color="primary">Password</ion-label>
         <ion-input type="password" placeholder="Password" name="password" formControlName="password"></ion-input>
       </ion-item>
       <span *ngIf="!regForm.controls.password.valid  && (regForm.controls.password.dirty)" class="invalid">
@@ -29,6 +50,7 @@
       </span>
 
       <ion-item>
+        <ion-label color="primary">Confirm Password</ion-label>
         <ion-input formControlName="confirmPassword" placeholder="Confirm Password" type="password" id="confirm-password" #confirmPassword class="form-control" name="confirm_password"></ion-input>
       </ion-item>
       <span *ngIf="!regForm.controls.confirmPassword.pristine && regForm.controls.confirmPassword.errors != null && regForm.controls.confirmPassword.errors['passwordsNotMatch']" class="invalid">Passwords do not match</span>

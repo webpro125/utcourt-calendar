@@ -29,6 +29,8 @@ export class Profile implements OnInit{
       storage.ready().then(() => {
        storage.get('profile').then(profile => {
          this.profileForm.controls.email.setValue(profile.email);
+         this.profileForm.controls.name.setValue(profile.name);
+         this.profileForm.controls.phone.setValue(profile.phone);
        }).catch(console.log);
       });
     }, (error) => {
@@ -39,6 +41,12 @@ export class Profile implements OnInit{
 
   ngOnInit(): any {
     this.profileForm =  this.fb.group({
+      name: ['', Validators.compose([
+        Validators.required,
+      ])],
+      phone: ['', Validators.compose([
+        Validators.required,
+      ])],
       email: ['', Validators.compose([
         Validators.required,
         this.isEmail
