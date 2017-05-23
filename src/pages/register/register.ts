@@ -94,7 +94,7 @@ export class RegisterPage implements OnInit {
           console.log(err);
           this.errorMessage = JSON.parse(err._body).errors;
         },
-        () => console.log('Movie Search Complete')
+        () => console.log('Register Complete')
       );
     }
   }

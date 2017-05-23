@@ -31,7 +31,8 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'Profile', component: 'Profile' },
-      { title: 'Request', component: 'Request' },
+      { title: 'Create Request', component: 'Request' },
+      { title: 'Received Requests', component: 'RequestHistoryPage' },
     ];
 
   }

@@ -28,6 +28,7 @@ export class Profile implements OnInit{
       this.authenticated = true;
       storage.ready().then(() => {
        storage.get('profile').then(profile => {
+          console.log(profile);
          this.profileForm.controls.email.setValue(profile.email);
          this.profileForm.controls.name.setValue(profile.name);
          this.profileForm.controls.phone.setValue(profile.phone);

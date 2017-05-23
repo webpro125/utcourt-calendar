@@ -53,10 +53,12 @@ export class Request {
       console.log(token);
       let headers = new Headers({"Content-Type": "application/json"});
       headers.append('Authorization', 'Bearer ' + token);
-
+      this.auth.showLoading();
       this.http.post(this.REQUEST_URL, JSON.stringify(this.request), {headers: headers}).map(res => res.json())
         .subscribe(
-          data => console.log(data),
+          data => {
+            this.auth.showMessage('Your request has been sent to ' + data.length + ' Attorneys', 'Success');
+          },
           err => console.log(err)
         );
     })

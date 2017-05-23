@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button menuToggle hideBackButton="true">
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Home</ion-title>
@@ -13,12 +13,21 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
-
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <h3>Welcome to our Utcourt App</h3>
+  <ion-card>
+    <ion-card-content>
+      You sent {{ requestCount }} requests
+    </ion-card-content>
+  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let request of requests">
+      <h2>{{ request.court_name.toUpperCase() }}</h2>
+      <h4>Court: {{ request.court}}</h4>
+      <h4>Type of Hearing: {{ request.hearing}}</h4>
+      <p item-right>{{ request.date  + ' ' }} {{ request.time | date:'h:mm'}}</p>
+    </ion-item>
+  </ion-list>
 
   <!--<button ion-button secondary menuToggle>Toggle Menu</button>-->
-  <a ion-button class="btn" (click)="user_info()">User Info</a>
+  <a ion-button class="btn" (click)="request_info()">Lord More</a>
 </ion-content>
