@@ -7,6 +7,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 // import { RegisterModule } from '../pages/register/register.module';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -14,6 +15,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from "@ionic/Storage";
 import { ReactiveFormsModule } from '@angular/forms';
+
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': '811cf005'
+  }
+};
 
 @NgModule({
   declarations: [
@@ -27,7 +34,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     IonicStorageModule.forRoot(),
     HttpModule,
     // RegisterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
