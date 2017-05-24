@@ -17,5 +17,17 @@
 
 
 <ion-content padding>
+  <h3 class="text-center">You Received {{ historyCount }} requests</h3>
 
+  <ion-card *ngFor="let history of histories">
+    <ion-card-header>
+      {{ history.user.name.toUpperCase() }}
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ history.message}}</p>
+      <h4 class="text-right">{{ history.court_date  + ' ' }} {{ history.court_time | date:'h:mm'}}</h4>
+    </ion-card-content>
+  </ion-card>
+  <a ion-button class="btn" (click)="request_history()">Lord More</a>
 </ion-content>

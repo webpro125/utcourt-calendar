@@ -52,7 +52,7 @@ export class HomePage {
           },
           err => console.log(err)
         );
-    })
+    });
   }
 
 
