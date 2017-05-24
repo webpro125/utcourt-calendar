@@ -24,18 +24,18 @@ export class Request {
 
   constructor(public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
     this.courts = [
-      {value: 'AJ', label: 'Abstract of Judgment (AJ)'},
-      {value: 'AA', label: 'Administrative Ag (AA)'},
-      {value: 'AW', label: 'Arbitration Award (AW)'},
-      {value: 'AS', label: 'Asbestos (AS)'},
-      {value: 'AT', label: 'Attorney Discipline (AT)'},
-      {value: 'SL', label: 'Child Support Lien (SL)'},
-      {value: 'CR', label: 'Civil Rights (CR)'},
-      {value: 'SK', label: 'Civil Stalking (SK)'},
+      {value: 'Abstract of Judgment (AJ)', label: 'Abstract of Judgment (AJ)'},
+      {value: 'Administrative Ag (AA)', label: 'Administrative Ag (AA)'},
+      {value: 'Arbitration Award (AW)', label: 'Arbitration Award (AW)'},
+      {value: 'Asbestos (AS)', label: 'Asbestos (AS)'},
+      {value: 'Attorney Discipline (AT)', label: 'Attorney Discipline (AT)'},
+      {value: 'Child Support Lien (SL)', label: 'Child Support Lien (SL)'},
+      {value: 'Civil Rights (CR)', label: 'Civil Rights (CR)'},
+      {value: 'Civil Stalking (SK)', label: 'Civil Stalking (SK)'},
     ];
     this.hearings = [
-      {value: 'ar', label: 'Arrangement'},
-      {value: 'wop', label: 'Waiver of Prelim'},
+      {value: 'Arrangement', label: 'Arrangement'},
+      {value: 'Waiver of Prelim', label: 'Waiver of Prelim'},
     ];
     this.auth.authenticated().then((result) => {
       this.authenticated = true;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import {Storage} from "@ionic/Storage";
 import { Http, Headers } from '@angular/http';
 import { Auth } from '../../providers/auth';
