@@ -22,15 +22,29 @@
       <div class="alert alert-danger" *ngFor="let data of errorMessage">
         <strong>{{ data }}</strong>
       </div>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+            <ion-label color="primary" stacked>Last Name</ion-label>
+            <ion-input name="last_name" placeholder="Last Name" formControlName="last_name" type="text" id="last_name" #last_name class="form-control"></ion-input>
+          </ion-item>
+          <span *ngIf="!profileForm.controls.last_name.valid  && (profileForm.controls.last_name.dirty)" class="invalid">
+            Last Name is Required
+          </span>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+            <ion-label color="primary" stacked>First Name</ion-label>
+            <ion-input name="first_name" placeholder="First Name" formControlName="first_name" type="text" id="first_name" #first_name class="form-control"></ion-input>
+          </ion-item>
+          <span *ngIf="!profileForm.controls.first_name.valid  && (profileForm.controls.first_name.dirty)" class="invalid">
+            First Name is Required
+          </span>
+        </ion-col>
+      </ion-row>
 
-      <ion-item>
-        <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
-        <ion-label color="primary" stacked>Name</ion-label>
-        <ion-input name="name" placeholder="Full Name" formControlName="name" type="text" id="name" #name class="form-control"></ion-input>
-      </ion-item>
-      <span *ngIf="!profileForm.controls.name.valid  && (profileForm.controls.name.dirty)" class="invalid">
-        Name is Required
-      </span>
 
       <ion-item>
         <ion-label color="primary" stacked>Phone Number</ion-label>

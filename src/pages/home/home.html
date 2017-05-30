@@ -21,8 +21,8 @@
   </ion-card>
   <ion-list>
     <ion-item *ngFor="let request of requests">
-      <h2>{{ request.court_name.toUpperCase() }}</h2>
-      <h4>Court: {{ request.court}}</h4>
+      <h2>{{ request.court_location}}</h2>
+      <h4>Client Name: {{ request.client_name.toUpperCase() }}</h4>
       <h4>Type of Hearing: {{ request.hearing}}</h4>
       <p item-right>{{ request.date  + ' ' }} {{ request.time | date:'h:mm'}}</p>
     </ion-item>

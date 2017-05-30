@@ -14,14 +14,30 @@
         <strong>{{ data }}</strong>
       </div>
 
-      <ion-item>
-        <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
-        <ion-label color="primary">Name</ion-label>
-        <ion-input name="name" placeholder="Full Name" formControlName="name" type="text" id="name" #name class="form-control"></ion-input>
-      </ion-item>
-      <span *ngIf="!regForm.controls.name.valid  && (regForm.controls.name.dirty)" class="invalid">
-        Name is Required
-      </span>
+
+      <ion-row>
+        <ion-col>
+            <ion-item>
+            <ion-label color="primary">First name</ion-label>
+            <ion-input name="first_name" placeholder="First Name" formControlName="first_name" type="text" id="first_name" #first_name class="form-control"></ion-input>
+          </ion-item>
+          <span *ngIf="!regForm.controls.first_name.valid  && (regForm.controls.first_name.dirty)" class="invalid">
+            First Name is Required
+          </span>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <!--<ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>-->
+            <ion-label color="primary">Last name</ion-label>
+            <ion-input name="last_name" placeholder="Last Name" formControlName="last_name" type="text" id="last_name" #last_name class="form-control"></ion-input>
+          </ion-item>
+          <span *ngIf="!regForm.controls.last_name.valid  && (regForm.controls.last_name.dirty)" class="invalid">
+            Last Name is Required
+          </span>
+        </ion-col>
+      </ion-row>
+
+
 
       <ion-item>
         <ion-label color="primary">Phone Number</ion-label>

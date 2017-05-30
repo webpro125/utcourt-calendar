@@ -21,8 +21,10 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label color="primary" stacked>Case Name</ion-label>
-          <ion-input type="text" placeholder="Full Name" name="court_name" [(ngModel)]="request.court_name" required></ion-input>
+          <ion-label color="primary" stacked>Court Location</ion-label>
+          <ion-select name="court"[(ngModel)]="request.court_location">
+            <ion-option *ngFor="let court of courtLocations" [value]="court.id" >{{court.name}}</ion-option>
+          </ion-select>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -40,17 +42,15 @@
         </ion-item>
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label color="primary" stacked>Court</ion-label>
-          <ion-select name="court"[(ngModel)]="request.court">
-            <ion-option *ngFor="let court of courts" [value]="court.value" >{{court.label}}</ion-option>
-          </ion-select>
+          <ion-label color="primary" stacked>Client Name</ion-label>
+          <ion-input type="text" placeholder="Full Name" name="court_name" [(ngModel)]="request.client_name" required></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
-
     <ion-row>
       <ion-col>
         <ion-item>

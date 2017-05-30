@@ -30,7 +30,8 @@ export class Profile implements OnInit{
        storage.get('profile').then(profile => {
           console.log(profile);
          this.profileForm.controls.email.setValue(profile.email);
-         this.profileForm.controls.name.setValue(profile.name);
+         this.profileForm.controls.first_name.setValue(profile.first_name);
+         this.profileForm.controls.last_name.setValue(profile.last_name);
          this.profileForm.controls.phone.setValue(profile.phone);
        }).catch(console.log);
       });
@@ -42,7 +43,10 @@ export class Profile implements OnInit{
 
   ngOnInit(): any {
     this.profileForm =  this.fb.group({
-      name: ['', Validators.compose([
+      first_name: ['', Validators.compose([
+        Validators.required,
+      ])],
+      last_name: ['', Validators.compose([
         Validators.required,
       ])],
       phone: ['', Validators.compose([
