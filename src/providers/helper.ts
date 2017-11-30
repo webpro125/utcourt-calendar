@@ -11,8 +11,8 @@ import {Storage} from "@ionic/Storage";
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class Auth {
-  loading: Loading;
+export class Helper {
+  public loading: Loading;
 
   constructor(public http: Http, private storage: Storage, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
 
@@ -35,22 +35,50 @@ export class Auth {
   showLoading() {
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...',
-      dismissOnPageChange: true
+      dismissOnPageChange: false
     });
-    this.loading.present();
   }
 
   hideLoading() {
     this.loading.dismiss();
+    this.loading = null;
   }
   showMessage(text, type) {
-    this.loading.dismiss();
-
     let alert = this.alertCtrl.create({
       title: type,
       subTitle: text,
       buttons: ['OK']
     });
     alert.present(prompt);
+  }
+
+  authSuccess(data) {
+    return new Promise((resolve, reject) => {
+      this.storage.set('profile', data.user);
+      this.storage.set('token', data.auth_token).then(() => {
+        resolve(true);
+      });
+    });
+  }
+
+  logout() {
+    return new Promise((resolve, reject) => {
+      this.storage.remove('profile');
+      this.storage.remove('token').then(() => {
+        resolve(true);
+      });
+    });
+  }
+  getProfile():any {
+    return new Promise((resolve, reject) => {
+      this.storage.ready().then(() => {
+        this.storage.get('profile').then(profile => {
+          resolve(profile)
+        }).catch(console.log);
+      });
+    });
+  }
+  setProfile(data) {
+    this.storage.set('profile', data);
   }
 }

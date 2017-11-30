@@ -1,12 +1,11 @@
 import { AuthService } from './../providers/auth-service';
-import { Auth } from './../providers/auth';
+import { Helper } from '../providers/helper';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 // import { RegisterModule } from '../pages/register/register.module';
 
@@ -15,6 +14,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from "@ionic/Storage";
 import { ReactiveFormsModule } from '@angular/forms';
+import {EnvModule} from "./env/env.module";
+import { RequestsProvider } from '../providers/requests';
+import { UserProvider } from '../providers/user';
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -26,7 +28,6 @@ const cloudSettings: CloudSettings = {
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
   ],
   imports: [
     BrowserModule,
@@ -35,20 +36,22 @@ const cloudSettings: CloudSettings = {
     HttpModule,
     // RegisterModule,
     ReactiveFormsModule,
-    CloudModule.forRoot(cloudSettings)
+    CloudModule.forRoot(cloudSettings),
+    EnvModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
-    Auth
+    Helper,
+    RequestsProvider,
+    UserProvider
   ]
 })
 export class AppModule {}

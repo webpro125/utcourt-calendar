@@ -1,24 +1,21 @@
 import { Component } from '@angular/core';
 import { NavController, MenuController} from 'ionic-angular';
-import { Auth } from '../../providers/auth';
-import {Storage} from "@ionic/Storage";
-import { Http, Headers } from '@angular/http';
-import * as Constant from '../../providers/constant'
+import { Helper } from '../../providers/helper';
+import { RequestsProvider} from "../../providers/requests";
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  private REQUEST_URL = Constant.REQUEST_URL;
 
   authenticated: boolean = false;
   requests: any;
   requestCount = 0;
   pageNo = 1;
-  constructor(private menu: MenuController, public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
+  constructor(private menu: MenuController, public nav: NavController, private helper: Helper, private requestsProvider: RequestsProvider) {
     this.menu.enable(true, 'myMenu');
-    this.auth.authenticated().then((result) => {
+    this.helper.authenticated().then((result) => {
       this.authenticated = true;
       this.request_info();
     }, (error) => {
@@ -29,31 +26,31 @@ export class HomePage {
 
   request_info() {
 
-    this.storage.get('token').then((token) => {
-      console.log(token);
-      let headers = new Headers();
-      headers.append('Authorization', 'Bearer ' + token);
+    let that = this;
 
-      this.http.get(this.REQUEST_URL + '?page=' + this.pageNo, {
-        headers: headers
-      }).map(res => res.json())
-        .subscribe(
-          data => {
-            this.requestCount = data.count;
-            if (this.pageNo == 1)
-              this.requests = data.requests;
-            else {
-              for (let request of data.requests) {
-                this.requests.push(request);
-              }
-              console.log(this.requests);
-            }
-            this.pageNo += 1;
-          },
-          err => console.log(err)
-        );
+    this.helper.showLoading();
+    this.helper.loading.present().then(()=> {
+      this.requestsProvider.getRequests(this.pageNo).then((data) => {
+        this.helper.hideLoading();
+        this.requestCount = data.count;
+        if (this.pageNo == 1) {
+          this.requests = data.requests;
+        } else {
+          for (let request of data.requests) {
+            this.requests.push(request);
+          }
+        }
+        this.pageNo += 1;
+      }, (error) => {
+        /*this.helper.hideLoading();*/
+        if (error === 'token_expired' || error === 'token_invalid')
+          this.helper.showMessage('Token Expired. we let you logout for security', 'Notification');
+        window.setTimeout(function () {
+          that.helper.logout().then(() => {
+            that.nav.setRoot('LoginPage');
+          })
+        }, 3000);
+      });
     });
   }
-
-
 }

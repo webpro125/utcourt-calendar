@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import {Storage} from "@ionic/Storage";
-import { Http, Headers} from '@angular/http';
-import { Auth } from '../../providers/auth';
-import { AuthService } from '../../providers/auth-service';
-import * as Constant from '../../providers/constant'
+import { Helper } from '../../providers/helper';
+import { UserProvider } from '../../providers/user'
 /**
  * Generated class for the Profile page.
  *
@@ -20,21 +17,17 @@ import * as Constant from '../../providers/constant'
 export class Profile implements OnInit{
   authenticated: any = false;
   profileForm: FormGroup;
-  private PROFILE_URL = Constant.PROFILE_URL;
   errorMessage = '';
 
-  constructor(public nav: NavController, private fb: FormBuilder, private auth1: Auth, private storage: Storage, public http: Http, private auth: AuthService) {
-    this.auth1.authenticated().then((result) => {
+  constructor(public nav: NavController, private fb: FormBuilder, private helper: Helper, private userProvider: UserProvider) {
+    this.helper.authenticated().then((result) => {
       this.authenticated = true;
-      storage.ready().then(() => {
-       storage.get('profile').then(profile => {
-          console.log(profile);
+      this.helper.getProfile().then( profile => {
          this.profileForm.controls.email.setValue(profile.email);
          this.profileForm.controls.first_name.setValue(profile.first_name);
          this.profileForm.controls.last_name.setValue(profile.last_name);
          this.profileForm.controls.phone.setValue(profile.phone);
        }).catch(console.log);
-      });
     }, (error) => {
       this.nav.setRoot('LoginPage');
       // this.nav.push(LoginPage);
@@ -88,31 +81,21 @@ export class Profile implements OnInit{
   }
 
   profileSubmit() {
-    this.auth1.showLoading();
-    this.storage.get('token').then((token) => {
-      console.log(token);
-      let headers = new Headers({"Content-Type": "application/json"});
-      headers.append('Authorization', 'Bearer ' + token);
-
-
-      this.http.post(this.PROFILE_URL, JSON.stringify(this.profileForm.value), {headers: headers}).map(res => res.json())
-        .subscribe(
-          data => {
-            this.storage.set('profile', data);
-            this.auth1.showMessage('Saved successfully.', 'Success');
-            this.errorMessage = null;
-          },
-          err => {
-            this.auth1.hideLoading();
-            if (err.status != 0)
-              this.errorMessage = JSON.parse(err._body);
-            else {
-              this.auth1.showMessage('No Internet Connection', 'Failed');
-            }
-          },
-          () => console.log('Movie Search Complete')
-        );
-    })
+    this.helper.showLoading();
+    this.helper.loading.present().then(()=> {
+      this.userProvider.profileSubmit(JSON.stringify(this.profileForm.value)).then((data) => {
+          this.helper.hideLoading();
+          this.helper.setProfile(data);
+          this.helper.showMessage('Saved successfully.', 'Success');
+          this.errorMessage = null;
+        },
+        err => {
+          this.helper.hideLoading();
+          this.errorMessage = err;
+        },
+        () => console.log('Movie Search Complete')
+      );
+    });
   }
 
 }

@@ -4,8 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { Auth } from '../providers/auth';
-import {Storage} from "@ionic/Storage";
+import { Helper } from '../providers/helper';
 
 @Component({
   templateUrl: 'app.html'
@@ -17,9 +16,9 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(private storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private auth: Auth) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private helper: Helper) {
 
-    this.auth.authenticated().then((result) => {
+    this.helper.authenticated().then((result) => {
       this.rootPage = HomePage;
     }, (error) => {
       this.rootPage = 'LoginPage';
@@ -54,10 +53,8 @@ export class MyApp {
   }
 
   logout() {
-    this.storage.remove('profile');
-    this.storage.remove('token').then(() => {
+    this.helper.logout().then(() => {
       this.nav.setRoot('LoginPage');
-    });
-
+    })
   }
 }

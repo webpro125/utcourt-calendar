@@ -1,5 +1,8 @@
 {
   "name": "utcourtCalendar",
   "app_id": "811cf005",
-  "type": "ionic-angular"
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
 }

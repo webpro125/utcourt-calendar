@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import {Storage} from "@ionic/Storage";
-import { Http, Headers } from '@angular/http';
-import { Auth } from '../../providers/auth';
-import * as Constant from '../../providers/constant'
+import { Helper } from '../../providers/helper';
+import { RequestsProvider} from "../../providers/requests";
 /**
  * Generated class for the RequestHistoryPage page.
  *
@@ -21,11 +19,9 @@ export class RequestHistoryPage {
   historyCount = 0;
   pageNo = 1;
 
-  REQUEST_HISTORY_URL = Constant.REQUEST_HISTORY_URL;
+  constructor(public nav: NavController, private helper: Helper, private requestsProvider: RequestsProvider) {
 
-  constructor(public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
-
-    this.auth.authenticated().then((result) => {
+    this.helper.authenticated().then((result) => {
       this.authenticated = true;
       this.request_history();
     }, (error) => {
@@ -38,30 +34,33 @@ export class RequestHistoryPage {
   }
 
   request_history() {
-    this.storage.get('token').then((token) => {
-      console.log(token);
-      let headers = new Headers();
-      headers.append('Authorization', 'Bearer ' + token);
+    let that = this;
 
-      this.http.get(this.REQUEST_HISTORY_URL + '?page=' + this.pageNo, {
-        headers: headers
-      }).map(res => res.json())
-        .subscribe(
-          data => {
-            this.historyCount = data.count;
-            let histories = JSON.parse(data.histories);
-            if (this.pageNo == 1)
-              this.histories = histories;
-            else {
-              for (let history of histories) {
-                this.histories.push(history);
-              }
-              console.log(this.histories);
-            }
-            this.pageNo += 1;
-          },
-          err => console.log(err)
-        );
+    this.helper.showLoading();
+    this.helper.loading.present().then(()=> {
+      this.requestsProvider.request_histories(this.pageNo).then((data) => {
+        this.helper.hideLoading();
+        let histories = JSON.parse(data.histories);
+        this.historyCount = data.count;
+        if (this.pageNo == 1)
+          this.histories = histories;
+        else {
+          for (let history of histories) {
+            this.histories.push(history);
+          }
+          console.log(this.histories);
+        }
+        this.pageNo += 1;
+      }, (error) => {
+        /*this.helper.hideLoading();*/
+        if (error === 'token_expired' || error === 'token_invalid')
+          this.helper.showMessage('Token Expired. we let you logout for security', 'Notification');
+        window.setTimeout(function () {
+          that.helper.logout().then(() => {
+            that.nav.setRoot('LoginPage');
+          })
+        }, 3000);
+      });
     });
   }
 

@@ -22,7 +22,7 @@
       <ion-col>
         <ion-item>
           <ion-label color="primary" stacked>Court Location</ion-label>
-          <ion-select name="court"[(ngModel)]="request.court_location">
+          <ion-select name="court_location" [(ngModel)]="request.court_location" required>
             <ion-option *ngFor="let court of courtLocations" [value]="court.id" >{{court.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -38,7 +38,7 @@
       <ion-col>
         <ion-item>
           <ion-label color="primary" stacked>Time</ion-label>
-          <ion-datetime type="time" placeholder="Time" name="time" displayFormat="hh:mm" [(ngModel)]="request.time"></ion-datetime>
+          <ion-datetime type="time" placeholder="Time" name="time" displayFormat="hh:mm" [(ngModel)]="request.time" required></ion-datetime>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -55,7 +55,7 @@
       <ion-col>
         <ion-item>
           <ion-label color="primary" stacked>Type of hearing</ion-label>
-          <ion-select name="court"[(ngModel)]="request.hearing">
+          <ion-select name="type_hearing" [(ngModel)]="request.hearing">
             <ion-option *ngFor="let hearing of hearings" [value]="hearing.value" >{{hearing.label}}</ion-option>
           </ion-select>
         </ion-item>

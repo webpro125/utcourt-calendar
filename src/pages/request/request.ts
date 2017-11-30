@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import {Storage} from "@ionic/Storage";
-import { Http, Headers } from '@angular/http';
-import { Auth } from '../../providers/auth';
-import * as Constant from '../../providers/constant'
+import { Helper } from '../../providers/helper';
+import { RequestsProvider} from "../../providers/requests";
 /**
  * Generated class for the Request page.
  *
@@ -17,14 +15,12 @@ import * as Constant from '../../providers/constant'
 })
 export class Request {
   authenticated: any = false;
-  request = { client_name: '', date: new Date().toISOString(), time: '', range: 15, court_location: '', hearing: '', notes: '' };
+  request = { client_name: '', date: new Date().toISOString(), time: '', range: 15, court_location: null, hearing: '', notes: '' };
   courtLocations: any;
   hearings: Array<{label: string, value: any}>;
-  private REQUEST_URL = Constant.REQUEST_URL;
-  private COURT_LOCATIONS_URL = Constant.COURT_LOCATIONS_URL;
 
-  constructor(public nav: NavController, private auth: Auth, private storage: Storage, public http: Http) {
-    this.auth.authenticated().then((result) => {
+  constructor(public nav: NavController, private helper: Helper, private  requestProvider: RequestsProvider) {
+    this.helper.authenticated().then((result) => {
       this.authenticated = true;
     }, (error) => {
       this.nav.setRoot('LoginPage');
@@ -49,37 +45,26 @@ export class Request {
     console.log('ionViewDidLoad Request');
   }
   requestSubmit() {
-    this.storage.get('token').then((token) => {
-      console.log(token);
-      let headers = new Headers({"Content-Type": "application/json"});
-      headers.append('Authorization', 'Bearer ' + token);
-      this.auth.showLoading();
-      this.http.post(this.REQUEST_URL, JSON.stringify(this.request), {headers: headers}).map(res => res.json())
-        .subscribe(
-          data => {
-            this.auth.showMessage('Your request has been sent to ' + data.length + ' Attorneys', 'Success');
-          },
-          err => console.log(err)
-        );
-    })
+    if (this.request.court_location === '') {
+
+    }
+    this.helper.showLoading();
+    this.helper.loading.present().then(()=> {
+      this.requestProvider.requestSubmit(JSON.stringify(this.request)).then((data) => {
+          this.helper.hideLoading();
+          this.helper.showMessage('Your request has been sent to ' + data.length + ' Attorneys', 'Success');
+        },
+        err => {
+          this.helper.hideLoading();
+        },
+        () => console.log('request submit')
+      );
+    });
   }
 
   getCourtLocations() {
-    this.storage.get('token').then((token) => {
-      console.log(token);
-      let headers = new Headers();
-      headers.append('Authorization', 'Bearer ' + token);
-
-      this.http.get(this.COURT_LOCATIONS_URL, {
-        headers: headers
-      }).map(res => res.json())
-        .subscribe(
-          data => {
-              this.courtLocations = data;
-              console.log(this.courtLocations);
-          },
-          err => console.log(err)
-        );
+    this.requestProvider.getCourtLocations().then( data => {
+      this.courtLocations = data;
     });
   }
 }

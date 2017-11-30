@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, MenuController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import {Storage} from "@ionic/Storage";
 import { HomePage } from '../../pages/home/home';
-import { Auth } from '../../providers/auth';
+import { Helper } from '../../providers/helper';
 /**
  * Generated class for the Register page.
  *
@@ -24,15 +23,9 @@ export class RegisterPage implements OnInit {
 
   errorMessage = '';
 
-  constructor(private menu: MenuController, private nav: NavController, private auth: AuthService, private fb: FormBuilder, private storage: Storage, private auth1: Auth) {
+  constructor(private menu: MenuController, private nav: NavController, private auth: AuthService, private fb: FormBuilder, private helper: Helper) {
     this.menu.enable(false, 'myMenu');
-    //storage.ready().then(() => {
-    //  storage.get('profile').then(profile => {
-    //    this.userEmail = profile.email;
-    //    this.userId = profile.id;
-    //  }).catch(console.log);
-    //});
-    this.auth1.authenticated().then((result) => {
+    this.helper.authenticated().then((result) => {
         this.nav.setRoot(HomePage);
       }, (error) => {
     });
@@ -88,10 +81,9 @@ export class RegisterPage implements OnInit {
     if (this.regForm.valid) {
       this.auth.register(this.regForm.value).subscribe(
        data => {
-          this.storage.set('profile', data.user);
-          this.storage.set('token', data.auth_token).then(() =>{
-            this.nav.setRoot(HomePage);
-          });
+         this.helper.authSuccess(data).then(() => {
+           this.nav.setRoot(HomePage);
+         });
         },
         err => {
           console.log(err);

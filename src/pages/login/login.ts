@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, Loading, IonicPage, NavController, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, MenuController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
-import { Auth } from '../../providers/auth';
+import { Helper } from '../../providers/helper';
 import { HomePage } from '../../pages/home/home';
-import {Storage} from "@ionic/Storage";
 /**
  * Generated class for the Login page.
  *
@@ -16,14 +15,11 @@ import {Storage} from "@ionic/Storage";
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  loading: Loading;
-  registerCredentials = { email: '', password: '' };
-  authenticated: boolean = false;
-  errorMessage = '';
+  loginCredentials = { email: '', password: '' };
 
-  constructor(private menu: MenuController, public auth1: Auth, private nav: NavController, private auth: AuthService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
+  constructor(private menu: MenuController, public helper: Helper, private nav: NavController, private auth: AuthService) {
     this.menu.enable(false, 'myMenu');
-    this.auth1.authenticated().then((result) => {
+    this.helper.authenticated().then((result) => {
       this.nav.setRoot(HomePage);
     }, (error) => {
     });
@@ -34,40 +30,23 @@ export class LoginPage {
   }
 
   public login() {
-    this.showLoading();
-    this.auth.login(this.registerCredentials).subscribe(
-      data => {
-        // this.authSuccess(data);
-        this.storage.set('profile', data.user);
-        this.storage.set('token', data.auth_token).then(() =>{
-          this.nav.setRoot(HomePage);
-        });
+    this.helper.showLoading();
+    this.helper.loading.present().then(()=> {
+      this.auth.login(this.loginCredentials).subscribe(
+        data => {
+          this.helper.authSuccess(data).then(() => {
+            this.helper.hideLoading();
+            this.nav.setRoot(HomePage);
+          });
 
-      },
-      err => {
-        this.showError("Your credentails are not correct!");
-      },
-      () => console.log('Login Complete')
-    );
-  }
-
-  showLoading() {
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
-      dismissOnPageChange: true
+        },
+        err => {
+          this.helper.showMessage("Your credentials are not correct!", "Failed");
+          this.helper.hideLoading();
+        },
+        () => console.log('Login Complete')
+      );
     });
-    this.loading.present();
-  }
-
-  showError(text) {
-    this.loading.dismiss();
-
-    let alert = this.alertCtrl.create({
-      title: 'Failed',
-      subTitle: text,
-      buttons: ['OK']
-    });
-    alert.present(prompt);
   }
 
   ionViewDidLoad() {
